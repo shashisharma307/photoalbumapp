@@ -1,0 +1,349 @@
+swagger: '2.0'
+info:
+  description: 'This is a sample Photo Alubm example'
+  version: 1.0.5
+  title: Swagger PhotoAlbum
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: shashisharma703@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: photoalbum.swagger.io
+basePath: /v1
+tags:
+  - name: album
+    description: Everything about your album
+    externalDocs:
+      description: Find out more
+      url: 'http://swagger.io'
+  - name: image
+    description: Everything about your album
+    externalDocs:
+      description: Find out more
+      url: 'http://swagger.io'
+  - name: user
+    description: Operations about user
+    externalDocs:
+      description: Find out more about our store
+      url: 'http://swagger.io'
+schemes:
+  - http
+paths:
+  '/album/image/{albumId}':
+    post:
+      tags:
+        - image
+      summary: uploads an image in a specified album
+      description: ''
+      operationId: uploadFile
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: albumId
+          in: path
+          description: ID of pet to update
+          required: true
+          type: integer
+          format: int64
+        - name: filename
+          in: formData
+          description: filename
+          required: false
+          type: string
+        - name: file
+          in: formData
+          description: file to upload
+          required: true
+          type: file
+      responses:
+        '200':
+          description: successful operation
+
+    get:
+      tags:
+        - image
+      summary: Find all images in an album
+      description: Find all images in an album
+      operationId: GetImagesInAlbumHandler
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: albumId
+          in: path
+          description: Id of particular album
+          required: true
+          type: integer
+          format: int
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Album'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No Record Found
+
+  '/album/image/{albumId}/{imageId}':
+    get:
+      tags:
+        - image
+      summary: get an image in album by albumid and imageid
+      description: ''
+      operationId: GetImageInAlbumHandler
+      produces:
+        - application/json
+      parameters:
+        - name: albumId
+          in: path
+          description: Id of particular album
+          required: true
+          type: integer
+          format: int
+        - name: imageId
+          in: path
+          description: Id of particular image
+          required: true
+          type: integer
+          format: int
+      responses:
+        '200':
+          description: successful operation
+
+
+    delete:
+      tags:
+        - image
+      summary: get an image in album by albumid and imageid
+      description: ''
+      operationId: DeleteImageInAlbumHandler
+      produces:
+        - application/json
+      parameters:
+        - name: albumId
+          in: path
+          description: Id of particular album
+          required: true
+          type: integer
+          format: int
+        - name: imageId
+          in: path
+          description: Id of particular image
+          required: true
+          type: integer
+          format: int
+      responses:
+        '200':
+          description: successful operation
+
+
+  /album:
+    post:
+      tags:
+        - album
+      summary: Add a new album
+      description: ''
+      operationId: addPet
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: body
+          name: body
+          description: Pet object that needs to be added to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Album'
+      responses:
+        '405':
+          description: Invalid input
+  '/album/{userId}':
+    get:
+      tags:
+        - album
+      summary: Get Albums by UserId
+      description: Return All the Album that is relates to userid
+      operationId: AlbumsGETHandler
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: userId
+          in: path
+          description: Id of the user
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+
+
+  '/album/{userId}/{albumId}':
+    get:
+      tags:
+        - album
+      summary: Find album by userid and albumid
+      description: Return a single Album related to user
+      operationId: AlbumGETHandler
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: userId
+          in: path
+          description: Id of the user
+          required: true
+          type: integer
+          format: int
+        - name: albumId
+          in: path
+          description: Id of particular album
+          required: true
+          type: integer
+          format: int
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Album'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+
+    delete:
+      tags:
+        - album
+      summary: Deletes a Album with albumid created by specific user
+      description: ''
+      operationId: AlbumsDeleteHandler
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: userId
+          in: path
+          description: Id of the user
+          required: true
+          type: integer
+          format: int
+        - name: albumId
+          in: path
+          description: Id of particular album
+          required: true
+          type: integer
+          format: int
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+
+  '/user/{id}':
+    get:
+      tags:
+        - user
+      summary: Get user by user name
+      description: ''
+      operationId: UserGETHandler
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched. Use 1 for testing. '
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: Invalid userid supplied
+        '404':
+          description: User not found
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: id
+          in: path
+          description: The user id that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '400':
+          description: Invalid userid supplied
+        '404':
+          description: User not found
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: createUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: body
+          name: body
+          description: Created user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        default:
+          description: successful operation
+definitions:
+  Album:
+    type: object
+    required:
+      - name
+      - photoUrls
+    properties:
+      UserId:
+        type: integer
+        format: int64
+      AlbumName:
+        type: string
+        example: Mysore
+      Description:
+        type: string
+  User:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      contact:
+        type: string
+      address:
+        type: string
+        description: User address
+    xml:
+      name: User

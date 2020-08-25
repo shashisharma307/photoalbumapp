@@ -1,0 +1,62 @@
+version: "2.1"
+services:
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    networks:
+      - test
+  kakfa:
+    image: wurstmeister/kafka
+    container_name: kafka
+    restart: always
+    links:
+      - zookeeper:zookeeper
+    ports:
+      - "9092:9092"
+    networks:
+      - test
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: localhost:9092
+      KAFKA_CREATE_TOPICS: "testtopic"
+    depends_on:
+      - zookeeper
+
+  mysqldb:
+    container_name: mysql
+    image: mysql:5.6
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    entrypoint:
+      sh -c "
+      echo 'CREATE DATABASE IF NOT EXISTS photoalbum;' > /docker-entrypoint-initdb.d/init.sql;
+      /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      "
+    ports:
+      - 3306:3306
+
+  photoalbum:
+      container_name: photoalbumapp
+      image: locator:1.1
+      depends_on:
+         - mysqldb
+          - kafka
+      logging:
+        driver: json-file
+        options:
+          max-size: "10m"
+          max-file: "1"
+      restart: always
+      ports:
+        - "8080:8080"
+networks:
+  test:
+    driver: bridge
