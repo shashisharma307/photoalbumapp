@@ -29,7 +29,7 @@ func AddImageToAlbumHandler(w http.ResponseWriter, r *http.Request) {
 	var img image.Image
 
 	vars := mux.Vars(r)
-	key := vars["albumid"]
+	key := vars["albumId"]
 	s, err := strconv.Atoi(key)
 
 	if err != nil {

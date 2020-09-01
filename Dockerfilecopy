@@ -1,0 +1,49 @@
+FROM ubuntu
+
+LABEL maintainer="shashisharma email:= shashisharma703@gmail.com"
+  # Install the C lib for kafka
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends apt-utils wget gnupg software-properties-common
+RUN apt-get install -y apt-transport-https ca-certificates
+RUN wget -qO - https://packages.confluent.io/deb/5.1/archive.key | apt-key add -
+RUN add-apt-repository "deb [arch=amd64] https://packages.confluent.io/deb/5.1 stable main"
+RUN apt-get update
+RUN apt-get install -y librdkafka-dev
+
+# Set necessary environmet variables needed for our image
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
+
+  # Install Go
+RUN add-apt-repository ppa:longsleep/golang-backports
+RUN apt-get update
+RUN apt-get install -y golang-1.11-go
+
+# Move to working directory /build
+WORKDIR /build
+
+# Copy and download dependency using go mod
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+# Copy the code into the container
+COPY . .
+
+# Build the application
+RUN go build -o main .
+
+# Move to /dist directory as the place for resulting binary folder
+WORKDIR /dist
+
+# Copy binary from build to main folder
+RUN cp /build/main .
+
+# Export necessary port
+EXPOSE 8080
+
+# Command to run when starting the container
+#CMD ["/dist/main"]
+ENTRYPOINT /main --port 8080 --host 0.0.0.0

@@ -7,12 +7,11 @@ import (
 )
 
 func ToUserEntity(r dto.UserRequest) models.User {
-	return models.User{Fname: r.Fname, Lname: r.Lname,Email: r.Email,Contact: r.Contact,Address: r.Address, Password: r.Password, Create: time.Now(),}
-}
+	return models.User{Fname: r.Fname, Lname: r.Lname,Email: r.Email,Contact: r.Contact,Address: r.Address, Password: r.Password, Create: time.Now()}}
 
 
 func ToUserDTO(r models.User) dto.UserDTO {
-	return dto.UserDTO{Fname: r.Fname, Lname: r.Lname,Email: r.Email,Contact: r.Contact,Address: r.Address}
+	return dto.UserDTO {UserId: r.UserId, Fname: r.Fname, Lname: r.Lname,Email: r.Email,Contact: r.Contact,Address: r.Address}
 }
 
 

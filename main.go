@@ -6,9 +6,11 @@ import (
 	"net/http"
 	"os"
 	"photoalbum/routes"
+//	 "photoalbum/config"
+
 )
 
-const PORT = ":8080"
+const PORT = ":9191"
 func main()  {
 	fmt.Println()
 	fmt.Println(os.Getwd())
@@ -21,7 +23,7 @@ func main()  {
 
 
 }
-//
+
 //func init(){
 //	if ok:= config.InitDB(); !ok{
 //		fmt.Println("error creating connection")
@@ -35,5 +37,5 @@ func main()  {
 //		fmt.Println(ok)
 //	}
 //}
-
-
+//
+//

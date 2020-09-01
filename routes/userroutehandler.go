@@ -88,6 +88,14 @@ func CreateNewUser(w http.ResponseWriter, r *http.Request){
 		dto.RespondWithError(w, http.StatusInternalServerError, err.Error())
 	}else {
 		userdto := utils.ToUserDTO(userresp)
+		config.ProducerMessage(struct{
+			UserId int
+			Message string
+		}{
+			UserId: userresp.UserId,
+			Message: "User Create Successfully",
+		},
+		)
 		dto.RespondWithJSON(w, http.StatusCreated, userdto)
 	}
 

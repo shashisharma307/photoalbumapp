@@ -59,7 +59,7 @@ func CreateNewAlbum(w http.ResponseWriter, r *http.Request){
 
 func AlbumsGETHandler(w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
-	key := vars["userid"]
+	key := vars["userId"]
 
 	userid, err := strconv.Atoi(key)
 

@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
-//	"github.com/confluentinc/confluent-kafka-go/kafka"
+	//"github.com/confluentinc/confluent-kafka-go/kafka"
 	"log"
 )
 
-
 func ProducerMessage(msg interface{}) error{
-	Broker := "broker:9092"
+	Broker := "localhost:9092"
 	topic := "testtopic"
 	producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": Broker})
 	if err!=nil{
@@ -41,3 +40,5 @@ func ProducerMessage(msg interface{}) error{
 	close(deliveryChan)
 	return nil
 }
+
+
